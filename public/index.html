@@ -11,6 +11,16 @@
 
   <!-- Librería SheetJS para exportación a Excel nativa -->
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script>
+    // Limpiar Service Worker residual de otros proyectos PWA (como asistencia-qr)
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then(function(registrations) {
+        for (let registration of registrations) {
+          registration.unregister();
+        }
+      });
+    }
+  </script>
 </head>
 <body>
 

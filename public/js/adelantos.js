@@ -231,3 +231,4 @@ window.openModalEditarAdelanto = openModalEditarAdelanto;
 window.closeModalAdelanto = closeModalAdelanto;
 window.guardarAdelanto = guardarAdelanto;
 window.eliminarAdelanto = eliminarAdelanto;
+

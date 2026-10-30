@@ -408,11 +408,21 @@ exports.getReporteData = async (req, res) => {
       );
       try {
         adelantos = await db.query(
-          `SELECT a.id, a.personal_id, p.nombre_completo, a.monto, DATE_FORMAT(a.fecha, "%d/%m/%Y") as fecha_fmt 
+          `SELECT a.id, a.personal_id, p.nombre_completo, a.monto, DATE_FORMAT(a.fecha, "%d/%m/%Y") as fecha_fmt, a.fecha 
            FROM adelantos a 
            JOIN personal p ON p.id = a.personal_id 
-           ORDER BY a.id ASC`
+           WHERE DATE_FORMAT(a.fecha, "%Y-%m") = ?
+           ORDER BY a.id ASC`,
+          [mesParam]
         );
+        if (!adelantos || adelantos.length === 0) {
+          adelantos = await db.query(
+            `SELECT a.id, a.personal_id, p.nombre_completo, a.monto, DATE_FORMAT(a.fecha, "%d/%m/%Y") as fecha_fmt, a.fecha 
+             FROM adelantos a 
+             JOIN personal p ON p.id = a.personal_id 
+             ORDER BY a.id ASC`
+          );
+        }
       } catch (e) {
         adelantos = [];
       }
