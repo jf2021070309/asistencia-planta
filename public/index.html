@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SURGAS | Sistema de Control de Asistencia y Despacho</title>
+  
+  <!-- Favicon y Tipografía -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔥</text></svg>">
+  <link rel="stylesheet" href="/css/styles.css">
+
+  <!-- Librería SheetJS para exportación a Excel nativa -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+</head>
+<body>
+
+  <!-- ==============================================================================
+       SIDEBAR PRINCIPAL
+       ============================================================================== -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-logo">SURGAS</div>
+      <span class="brand-tag">PLANTA</span>
+    </div>
+
+    <!-- Botón Destacado: Registrar Asistencia -->
+    <button type="button" class="btn-sidebar-primary" data-nav="registro">
+      <svg style="width: 18px; height: 18px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      <span>Registrar asistencia</span>
+    </button>
+
+    <!-- Navegación General -->
+    <div class="sidebar-nav">
+      <a class="nav-item" data-nav="inicio" data-view="inicio">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+        </svg>
+        <span>Inicio</span>
+      </a>
+
+      <a class="nav-item" data-nav="asistencias" data-view="asistencias">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
+        </svg>
+        <span>Asistencias</span>
+      </a>
+
+      <a class="nav-item" data-nav="tardanzas" data-view="tardanzas">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+        <span>Tardanzas</span>
+      </a>
+
+      <a class="nav-item" data-nav="adelantos" data-view="adelantos">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+        <span>Adelantos</span>
+      </a>
+    </div>
+
+    <!-- Sección: Despacho de Gas -->
+    <div class="sidebar-section-title">DESPACHO DE GAS</div>
+
+    <!-- Botón Verde: Nueva Esquela -->
+    <button type="button" class="btn-sidebar-green" data-nav="nueva-esquela">
+      <svg style="width: 18px; height: 18px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+      </svg>
+      <span>Nueva Esquela</span>
+    </button>
+
+    <div class="sidebar-nav">
+      <a class="nav-item" data-nav="esquelas" data-view="esquelas">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"></path>
+        </svg>
+        <span>Esquelas</span>
+      </a>
+    </div>
+
+    <!-- Pie del Sidebar con Estado de Conexión -->
+    <div class="sidebar-footer">
+      <span>SURGAS v1.0</span>
+      <div id="db-status-indicator" class="db-status-badge">● Verificando...</div>
+    </div>
+  </aside>
+
+  <!-- ==============================================================================
+       ÁREA DE CONTENIDO PRINCIPAL (SPA)
+       ============================================================================== -->
+  <div class="main-wrapper">
+    <!-- Barra superior móvil -->
+    <div class="mobile-topbar">
+      <button type="button" id="btn-mobile-menu" class="btn-toggle-menu">☰</button>
+      <div style="font-weight: 800; letter-spacing: 0.5px;">SURGAS</div>
+      <div style="width: 24px;"></div>
+    </div>
+
+    <div class="content-area">
+
+      <!-- ==========================================================================
+           VISTA 1: INICIO (PANEL PRINCIPAL)
+           ========================================================================== -->
+      <section id="view-inicio" class="view-section" style="display: none;">
+        <div class="page-header">
+          <div class="page-title-block">
+            <h1>Panel Principal</h1>
+            <p>Sistema de Control de Asistencia - SURGAS</p>
+          </div>
+        </div>
+
+        <!-- 4 Tarjetas de Métricas (KPIs) -->
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-icon-circle kpi-blue">
+              <svg style="width: 26px; height: 26px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+              </svg>
+            </div>
+            <div class="kpi-meta">
+              <div class="kpi-title">PERSONAL REGISTRADO</div>
+              <div class="kpi-value" id="kpi-personal">8</div>
+            </div>
+          </div>
+
+          <div class="kpi-card">
+            <div class="kpi-icon-circle kpi-green">
+              <svg style="width: 26px; height: 26px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+            </div>
+            <div class="kpi-meta">
+              <div class="kpi-title">ASISTIERON HOY</div>
+              <div class="kpi-value" id="kpi-asistieron">0</div>
+            </div>
+          </div>
+
+          <div class="kpi-card">
+            <div class="kpi-icon-circle kpi-cyan">
+              <svg style="width: 26px; height: 26px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"></path>
+              </svg>
+            </div>
+            <div class="kpi-meta">
+              <div class="kpi-title">ESQUELAS HOY</div>
+              <div class="kpi-value" id="kpi-esquelas">0</div>
+            </div>
+          </div>
+
+          <div class="kpi-card">
+            <div class="kpi-icon-circle kpi-yellow">
+              <svg style="width: 26px; height: 26px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+              </svg>
+            </div>
+            <div class="kpi-meta">
+              <div class="kpi-title">FECHA DE HOY</div>
+              <div class="kpi-value" style="font-size: 1.25rem;" id="kpi-fecha">30/10/2026</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Accesos Rápidos -->
+        <div class="card">
+          <div class="card-body">
+            <h3 style="font-size: 1rem; font-weight: 700; color: #1e293b; margin-bottom: 1rem;">Accesos Rápidos</h3>
+            <div class="quick-actions-bar" style="padding: 0;">
+              <button type="button" class="btn btn-primary" data-nav="registro">
+                <svg style="width: 16px; height: 16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <span>Registrar Asistencia del Día</span>
+              </button>
+
+              <button type="button" class="btn btn-outline" data-nav="asistencias">
+                <svg style="width: 16px; height: 16px; color: #64748b;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                </svg>
+                <span>Ver Matriz de Asistencias</span>
+              </button>
+
+              <button type="button" class="btn btn-success" data-nav="nueva-esquela">
+                <svg style="width: 16px; height: 16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"></path>
+                </svg>
+                <span>Nueva Esquela de Despacho</span>
+              </button>
+
+              <button type="button" class="btn btn-outline-primary" data-nav="esquelas">
+                <svg style="width: 16px; height: 16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                </svg>
+                <span>Ver Esquelas de Despacho</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================================================
+           VISTA 2: ASISTENCIAS (MATRIZ INTERACTIVA)
+           ========================================================================== -->
+      <section id="view-asistencias" class="view-section" style="display: block;">
+        <div class="page-header">
+          <div class="page-title-block">
+            <h1>Asistencias</h1>
+            <p>Control de asistencia del personal</p>
+          </div>
+          <div class="page-header-actions" style="display: flex; gap: 8px;">
+            <button type="button" class="btn btn-success" onclick="handleExportPDF()">
+              <svg style="width: 16px; height: 16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+              </svg>
+              <span>Exportar PDF (Oficial)</span>
+            </button>
+            <button type="button" class="btn btn-outline" onclick="handleExportExcel()">
+              <svg style="width: 16px; height: 16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+              </svg>
+              <span>Exportar Excel</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Filtro Mes -->
+        <div class="card">
+          <div class="card-body">
+            <div class="filter-bar">
+              <div class="form-group">
+                <label for="asistencia-mes-picker">Mes</label>
+                <input type="month" id="asistencia-mes-picker" class="form-control" value="2026-10" />
+              </div>
+              <button type="button" class="btn btn-primary" onclick="loadAsistenciasMatrix()">
+                <svg style="width: 15px; height: 15px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+                <span>Buscar</span>
+              </button>
+              <button type="button" class="btn btn-success" onclick="handleExportExcel()">
+                <svg style="width: 15px; height: 15px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                </svg>
+                <span>Exportar PDF (Excel)</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tabla Matriz con Scroll Horizontal -->
+        <div class="matrix-container card">
+          <table class="matrix-table">
+            <thead id="matrix-thead">
+              <!-- Renderizado dinámico -->
+            </thead>
+            <tbody id="matrix-tbody">
+              <!-- Renderizado dinámico -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ==========================================================================
+           VISTA 3: TARDANZAS
+           ========================================================================== -->
+      <section id="view-tardanzas" class="view-section" style="display: none;">
+        <div class="page-header">
+          <div class="page-title-block">
+            <h1>Tardanzas</h1>
+            <p>Resumen de tardanzas del personal por mes</p>
+          </div>
+        </div>
+
+        <!-- Filtro Mes -->
+        <div class="card">
+          <div class="card-body">
+            <div class="filter-bar">
+              <div class="form-group">
+                <label for="tardanza-mes-picker">Mes</label>
+                <input type="month" id="tardanza-mes-picker" class="form-control" value="2026-10" />
+              </div>
+              <button type="button" class="btn btn-primary" onclick="loadTardanzas()">
+                <svg style="width: 15px; height: 15px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+                <span>Buscar</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Contenedor de Tarjetas de Tardanza -->
+        <div id="tardanzas-container">
+          <!-- Renderizado dinámico -->
+        </div>
+      </section>
+
+      <!-- ==========================================================================
+           VISTA 4: REGISTRAR ASISTENCIA
+           ========================================================================== -->
+      <section id="view-registro" class="view-section" style="display: none;">
+        <div class="page-header">
+          <div class="page-title-block">
+            <h1>Registrar asistencia</h1>
+            <p>Registra la asistencia del personal.</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-body">
+            <div class="filter-bar" style="margin-bottom: 1.5rem;">
+              <div class="form-group">
+                <label for="registro-fecha-input">Fecha</label>
+                <input type="date" id="registro-fecha-input" class="form-control" value="2026-10-30" onchange="loadRegistroAsistencia(this.value)" />
+              </div>
+            </div>
+
+            <!-- Tabla de Pase de Lista -->
+            <div style="overflow-x: auto;">
+              <table class="attendance-register-table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Personal</th>
+                    <th>Asistencia</th>
+                    <th>Hora entrada</th>
+                    <th>Hora salida</th>
+                  </tr>
+                </thead>
+                <tbody id="registro-tbody">
+                  <!-- Renderizado dinámico -->
+                </tbody>
+              </table>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; margin-top: 1.5rem;">
+              <button type="button" id="btn-guardar-asistencia" class="btn btn-primary" onclick="guardarAsistenciaDia()">
+                <svg style="width: 16px; height: 16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path>
+                </svg>
+                <span>Guardar asistencia</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================================================
+           VISTA 5: NUEVA ESQUELA DE DESPACHO
+           ========================================================================== -->
+      <section id="view-nueva-esquela" class="view-section" style="display: none;">
+        <div class="page-header">
+          <div style="display: flex; align-items: center; gap: 1rem;">
+            <button type="button" class="btn btn-outline" data-nav="esquelas" style="padding: 0.4rem 0.75rem;">
+              <svg style="width: 16px; height: 16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+              </svg>
+            </button>
+            <div class="page-title-block">
+              <h1>Nueva Esquela</h1>
+              <p id="esquela-correlativo-text">Correlativo: ESQ-013</p>
+            </div>
+          </div>
+        </div>
+
+        <form id="form-nueva-esquela" onsubmit="event.preventDefault(); guardarEsquela();">
+          <div class="esquela-layout">
+            
+            <!-- Columna Izquierda: Datos Generales -->
+            <div class="card">
+              <div class="card-header-styled header-gray">
+                <svg style="width: 18px; height: 18px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <span>Datos Generales</span>
+              </div>
+              <div class="card-body" style="display: flex; flex-direction: column; gap: 1rem;">
+                <div class="form-group">
+                  <label for="esquela-fecha-input">Fecha</label>
+                  <input type="date" id="esquela-fecha-input" class="form-control" value="2026-10-30" required />
+                </div>
+
+                <div class="form-group">
+                  <label for="esquela-chofer-select">Chofer</label>
+                  <select id="esquela-chofer-select" class="form-control" required>
+                    <option value="">-- Selecciona un chofer --</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label for="esquela-placa-select">Placa del vehículo</label>
+                  <select id="esquela-placa-select" class="form-control" required>
+                    <option value="">-- Selecciona una placa --</option>
+                  </select>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                  <div class="form-group">
+                    <label for="esquela-hora-salida">Hora de Salida</label>
+                    <input type="time" id="esquela-hora-salida" class="form-control" />
+                  </div>
+                  <div class="form-group">
+                    <label for="esquela-hora-llegada">Hora de Llegada</label>
+                    <input type="time" id="esquela-hora-llegada" class="form-control" />
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="esquela-observaciones">Observaciones</label>
+                  <textarea id="esquela-observaciones" class="form-control" rows="3" placeholder="Alguna observación adicional..."></textarea>
+                </div>
+              </div>
+            </div>
+
+            <!-- Columna Derecha: Balones Llenos, Vacíos y Cambios -->
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+              
+              <!-- 1. Balones Llenos (Salida) -->
+              <div class="card" style="margin-bottom: 0;">
+                <div class="card-header-styled header-green">
+                  <svg style="width: 18px; height: 18px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z"></path>
+                  </svg>
+                  <span>Balones Llenos (Salida)</span>
+                </div>
+                <div class="card-inputs-grid">
+                  <div class="form-group">
+                    <label>Llenos 10 kg</label>
+                    <input type="number" id="esq-llenos-10" class="form-control number-input-lg" value="0" min="0" />
+                  </div>
+                  <div class="form-group">
+                    <label>Llenos 45 kg</label>
+                    <input type="number" id="esq-llenos-45" class="form-control number-input-lg" value="0" min="0" />
+                  </div>
+                  <div class="form-group">
+                    <label>Llenos 5 kg</label>
+                    <input type="number" id="esq-llenos-5" class="form-control number-input-lg" value="0" min="0" />
+                  </div>
+                </div>
+              </div>
+
+              <!-- 2. Dev. Cambios (Salida) -->
+              <div class="card" style="margin-bottom: 0;">
+                <div class="card-header-styled header-orange">
+                  <svg style="width: 18px; height: 18px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                  </svg>
+                  <span>Dev. Cambios (Salida)</span>
+                </div>
+                <div class="card-inputs-grid">
+                  <div class="form-group">
+                    <label>Cambios 5 kg</label>
+                    <input type="number" id="esq-csal-5" class="form-control number-input-lg" value="0" min="0" />
+                  </div>
+                  <div class="form-group">
+                    <label>Cambios 10 kg</label>
+                    <input type="number" id="esq-csal-10" class="form-control number-input-lg" value="0" min="0" />
+                  </div>
+                  <div class="form-group">
+                    <label>Cambios 45 kg</label>
+                    <input type="number" id="esq-csal-45" class="form-control number-input-lg" value="0" min="0" />
+                  </div>
+                </div>
+              </div>
+
+              <!-- 3. Balones Vacíos (Ingreso / Retorno) -->
+              <div class="card" style="margin-bottom: 0;">
+                <div class="card-header-styled header-slate">
+                  <svg style="width: 18px; height: 18px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                  </svg>
+                  <span>Balones Vacíos (Ingreso / Retorno)</span>
+                </div>
+                <div class="card-inputs-grid">
+                  <div class="form-group">
+                    <label>Vacíos 10 kg</label>
+                    <input type="number" id="esq-vac-10" class="form-control number-input-lg" value="0" min="0" />
+                  </div>
+                  <div class="form-group">
+                    <label>Vacíos 45 kg</label>
+                    <input type="number" id="esq-vac-45" class="form-control number-input-lg" value="0" min="0" />
+                  </div>
+                  <div class="form-group">
+                    <label>Vacíos 5 kg</label>
+                    <input type="number" id="esq-vac-5" class="form-control number-input-lg" value="0" min="0" />
+                  </div>
+                </div>
+              </div>
+
+              <!-- 4. Dev. Cambios (Ingreso / Retorno) -->
+              <div class="card" style="margin-bottom: 0;">
+                <div class="card-header-styled header-purple">
+                  <svg style="width: 18px; height: 18px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"></path>
+                  </svg>
+                  <span>Dev. Cambios (Ingreso / Retorno)</span>
+                </div>
+                <div class="card-inputs-grid">
+                  <div class="form-group">
+                    <label>Dev. Cambio 5 kg</label>
+                    <input type="number" id="esq-cing-5" class="form-control number-input-lg" value="0" min="0" />
+                  </div>
+                  <div class="form-group">
+                    <label>Dev. Cambio 10 kg</label>
+                    <input type="number" id="esq-cing-10" class="form-control number-input-lg" value="0" min="0" />
+                  </div>
+                  <div class="form-group">
+                    <label>Dev. Cambio 45 kg</label>
+                    <input type="number" id="esq-cing-45" class="form-control number-input-lg" value="0" min="0" />
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- Acciones del Formulario -->
+          <div class="esquela-actions-footer">
+            <button type="button" class="btn btn-outline" data-nav="esquelas">
+              <svg style="width: 16px; height: 16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+              </svg>
+              <span>Cancelar</span>
+            </button>
+            <button type="submit" id="btn-guardar-esquela" class="btn btn-primary">
+              <svg style="width: 16px; height: 16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path>
+              </svg>
+              <span>Guardar Esquela</span>
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <!-- ==========================================================================
+           VISTA 6: ESQUELAS (HISTORIAL DE DESPACHOS)
+           ========================================================================== -->
+      <section id="view-esquelas" class="view-section" style="display: none;">
+        <div class="page-header">
+          <div class="page-title-block">
+            <h1>Esquelas de Despacho</h1>
+            <p>Control y registro de salidas de gas licuado</p>
+          </div>
+          <div class="page-header-actions">
+            <button type="button" class="btn btn-success" data-nav="nueva-esquela">
+              <svg style="width: 16px; height: 16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+              </svg>
+              <span>Nueva Esquela</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-body" style="padding: 0; overflow-x: auto;">
+            <table class="tardanza-table" style="width: 100%;">
+              <thead>
+                <tr>
+                  <th>Correlativo</th>
+                  <th>Fecha</th>
+                  <th>Chofer</th>
+                  <th>Placa</th>
+                  <th>Hora Salida</th>
+                  <th>Hora Llegada</th>
+                  <th>Balones Salida</th>
+                  <th>Balones Retorno</th>
+                </tr>
+              </thead>
+              <tbody id="esquelas-tbody">
+                <!-- Renderizado dinámico -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================================================
+           VISTA 7: ADELANTOS DE DINERO (CRUD COMPLETO)
+           ========================================================================== -->
+      <section id="view-adelantos" class="view-section" style="display: none;">
+        <div class="page-header">
+          <div class="page-title-block">
+            <h1>Adelantos de Dinero</h1>
+            <p>Control y gestión de adelantos y préstamos otorgados al personal</p>
+          </div>
+          <div class="page-header-actions">
+            <button type="button" class="btn btn-success" onclick="openModalCrearAdelanto()">
+              <svg style="width: 16px; height: 16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+              </svg>
+              <span>+ Nuevo Adelanto</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Tarjetas de Métricas de Adelantos -->
+        <div class="kpi-grid" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); margin-bottom: 1.5rem;">
+          <div class="card kpi-card" style="border-left: 4px solid #006837;">
+            <div class="kpi-content">
+              <span class="kpi-label">TOTAL ADELANTOS DEL MES</span>
+              <span id="adelantos-kpi-total" class="kpi-value" style="color: #006837;">S/ 0.00</span>
+            </div>
+          </div>
+          <div class="card kpi-card" style="border-left: 4px solid #2563eb;">
+            <div class="kpi-content">
+              <span class="kpi-label">NÚMERO DE ADELANTOS</span>
+              <span id="adelantos-kpi-cantidad" class="kpi-value">0</span>
+            </div>
+          </div>
+          <div class="card kpi-card" style="border-left: 4px solid #f59e0b;">
+            <div class="kpi-content">
+              <span class="kpi-label">PROMEDIO POR ADELANTO</span>
+              <span id="adelantos-kpi-promedio" class="kpi-value">S/ 0.00</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Barra de Filtros -->
+        <div class="card" style="margin-bottom: 1.5rem;">
+          <div class="card-body">
+            <div class="filter-bar">
+              <div class="form-group">
+                <label for="adelanto-mes-picker">Filtrar por Mes</label>
+                <input type="month" id="adelanto-mes-picker" class="form-control" value="2026-09" onchange="loadAdelantos(this.value)" />
+              </div>
+              <button type="button" class="btn btn-primary" onclick="loadAdelantos()">
+                <svg style="width: 15px; height: 15px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+                <span>Buscar</span>
+              </button>
+              <button type="button" class="btn btn-outline" onclick="loadAdelantos('')">
+                <span>Ver Todos los Meses</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tabla de Adelantos -->
+        <div class="card">
+          <div class="card-body" style="padding: 0; overflow-x: auto;">
+            <table class="tardanza-table adelantos-table" style="width: 100%;">
+              <thead>
+                <tr>
+                  <th style="width: 45px; text-align: center;">Nº</th>
+                  <th style="text-align: left; padding-left: 1rem;">COLABORADOR</th>
+                  <th style="width: 160px; text-align: center;">MONTO</th>
+                  <th style="width: 180px; text-align: center;">FECHA</th>
+                  <th style="text-align: left;">OBSERVACIONES</th>
+                  <th style="width: 110px; text-align: center;">ACCIONES</th>
+                </tr>
+              </thead>
+              <tbody id="adelantos-tbody">
+                <!-- Se llena dinámicamente con JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <!-- ==============================================================================
+       MODAL 1: REGISTRAR / EDITAR ADELANTO DE DINERO
+       ============================================================================== -->
+  <div id="modal-adelanto" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="modal-adelanto-title">Registrar Adelanto de Dinero</h3>
+        <button type="button" class="modal-close-btn" onclick="closeModalAdelanto()">&times;</button>
+      </div>
+      <form id="form-adelanto" onsubmit="guardarAdelanto(event)">
+        <div class="modal-body">
+          <input type="hidden" id="adelanto-id" value="" />
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label for="adelanto-personal-select" style="font-weight: 600; display: block; margin-bottom: 0.35rem;">Colaborador *</label>
+            <select id="adelanto-personal-select" class="form-control" required style="width: 100%;">
+              <!-- Cargado dinámicamente -->
+            </select>
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+            <div class="form-group">
+              <label for="adelanto-monto-input" style="font-weight: 600; display: block; margin-bottom: 0.35rem;">Monto (S/) *</label>
+              <input type="number" step="0.01" min="1" id="adelanto-monto-input" class="form-control" placeholder="Ej: 300.00" required />
+            </div>
+            <div class="form-group">
+              <label for="adelanto-fecha-input" style="font-weight: 600; display: block; margin-bottom: 0.35rem;">Fecha *</label>
+              <input type="date" id="adelanto-fecha-input" class="form-control" required />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="adelanto-obs-input" style="font-weight: 600; display: block; margin-bottom: 0.35rem;">Observaciones / Motivo</label>
+            <input type="text" id="adelanto-obs-input" class="form-control" placeholder="Ej: Adelanto de quincena, emergencia médica..." />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" onclick="closeModalAdelanto()">Cancelar</button>
+          <button type="submit" class="btn btn-success">Guardar Adelanto</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==============================================================================
+       MODAL 2: EDITAR ASISTENCIA INDIVIDUAL (CRUD INTERACTIVO EN MATRIZ)
+       ============================================================================== -->
+  <div id="modal-editar-asistencia" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div>
+          <h3 style="margin: 0;">Editar Registro de Asistencia</h3>
+          <p id="modal-asistencia-sub" style="margin: 2px 0 0 0; font-size: 0.85rem; color: var(--text-muted);"></p>
+        </div>
+        <button type="button" class="modal-close-btn" onclick="closeModalEditarAsistencia()">&times;</button>
+      </div>
+      <form id="form-editar-asistencia" onsubmit="guardarAsistenciaIndividual(event)">
+        <div class="modal-body">
+          <input type="hidden" id="edit-asistencia-personal-id" value="" />
+          <input type="hidden" id="edit-asistencia-fecha" value="" />
+
+          <!-- Estado de Asistencia -->
+          <div class="form-group" style="margin-bottom: 1.25rem;">
+            <label style="font-weight: 600; display: block; margin-bottom: 0.5rem;">Condición / Estado de Asistencia *</label>
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;">
+              <label style="display: flex; flex-direction: column; align-items: center; padding: 10px 4px; border: 1.5px solid #cbd5e1; border-radius: 6px; cursor: pointer; text-align: center;" id="label-estado-P">
+                <input type="radio" name="edit-estado" value="P" onchange="handleEstadoChange(this.value)" required />
+                <span class="badge-status p" style="margin: 4px 0;">P</span>
+                <span style="font-size: 11px; font-weight: 600;">Presente</span>
+              </label>
+              <label style="display: flex; flex-direction: column; align-items: center; padding: 10px 4px; border: 1.5px solid #cbd5e1; border-radius: 6px; cursor: pointer; text-align: center;" id="label-estado-T">
+                <input type="radio" name="edit-estado" value="T" onchange="handleEstadoChange(this.value)" />
+                <span class="badge-status t" style="margin: 4px 0;">T</span>
+                <span style="font-size: 11px; font-weight: 600;">Tardanza</span>
+              </label>
+              <label style="display: flex; flex-direction: column; align-items: center; padding: 10px 4px; border: 1.5px solid #cbd5e1; border-radius: 6px; cursor: pointer; text-align: center;" id="label-estado-F">
+                <input type="radio" name="edit-estado" value="F" onchange="handleEstadoChange(this.value)" />
+                <span class="badge-status f" style="margin: 4px 0;">F</span>
+                <span style="font-size: 11px; font-weight: 600;">Falta</span>
+              </label>
+              <label style="display: flex; flex-direction: column; align-items: center; padding: 10px 4px; border: 1.5px solid #cbd5e1; border-radius: 6px; cursor: pointer; text-align: center;" id="label-estado-D">
+                <input type="radio" name="edit-estado" value="-" onchange="handleEstadoChange(this.value)" />
+                <span class="badge-status dash" style="margin: 4px 0;">-</span>
+                <span style="font-size: 11px; font-weight: 600;">Descanso</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Campos de Horario (Se activan con P o T) -->
+          <div id="bloque-horarios" style="border: 1px solid #e2e8f0; background: #f8fafc; border-radius: 6px; padding: 12px; margin-bottom: 1.25rem;">
+            <div style="font-size: 11px; font-weight: 700; color: #475569; margin-bottom: 8px; text-transform: uppercase;">
+              Horario Oficial de Entrada: 07:30 | Salida: 16:30
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 8px;">
+              <div class="form-group">
+                <label for="edit-hora-entrada" style="font-weight: 600; display: block; margin-bottom: 0.35rem; font-size: 12px;">Hora Entrada</label>
+                <input type="time" id="edit-hora-entrada" class="form-control" onchange="recalcularTardanzaEnModal()" />
+              </div>
+              <div class="form-group">
+                <label for="edit-hora-salida" style="font-weight: 600; display: block; margin-bottom: 0.35rem; font-size: 12px;">Hora Salida</label>
+                <input type="time" id="edit-hora-salida" class="form-control" value="16:30" />
+              </div>
+            </div>
+
+            <!-- Indicador dinámico de minutos de tardanza -->
+            <div id="indicador-tardanza" style="display: none; background: #fef08a; border: 1px solid #fde047; border-radius: 4px; padding: 8px 12px; font-size: 12px; color: #854d0e; font-weight: 600; align-items: center; gap: 8px;">
+              <svg style="width: 16px; height: 16px; flex-shrink: 0;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+              <span id="texto-minutos-tardanza">Tardanza detectada: +0 min</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="edit-asistencia-obs" style="font-weight: 600; display: block; margin-bottom: 0.35rem; font-size: 12px;">Observación / Justificación</label>
+            <input type="text" id="edit-asistencia-obs" class="form-control" placeholder="Ej: Justificado por cita médica, retraso de transporte..." />
+          </div>
+        </div>
+
+        <div class="modal-footer" style="display: flex; justify-content: space-between;">
+          <button type="button" class="btn btn-outline" style="color: #dc2626; border-color: #fecaca;" onclick="eliminarAsistenciaIndividual()">
+            Limpiar (Descanso)
+          </button>
+          <div style="display: flex; gap: 8px;">
+            <button type="button" class="btn btn-outline" onclick="closeModalEditarAsistencia()">Cancelar</button>
+            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Scripts Modulares -->
+  <script src="/js/export.js"></script>
+  <script src="/js/dashboard.js"></script>
+  <script src="/js/asistencia.js"></script>
+  <script src="/js/tardanzas.js"></script>
+  <script src="/js/adelantos.js"></script>
+  <script src="/js/registro.js"></script>
+  <script src="/js/esquela.js"></script>
+  <script src="/js/app.js"></script>
+
+</body>
+</html>
