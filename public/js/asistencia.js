@@ -239,7 +239,7 @@ async function eliminarAsistenciaIndividual() {
       text: '¿Deseas restablecer este registro a condición de Descanso (-)?',
       icon: 'question',
       showCancelButton: true,
-      confirmButtonColor: '#006837',
+      confirmButtonColor: '#720917',
       cancelButtonColor: '#64748b',
       confirmButtonText: 'Sí, restablecer',
       cancelButtonText: 'Cancelar'

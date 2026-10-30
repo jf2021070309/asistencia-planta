@@ -21,7 +21,7 @@ function abrirReporteImpresion(data) {
         icon: 'warning',
         title: 'Ventana bloqueada',
         text: 'Por favor habilita las ventanas emergentes (pop-ups) en tu navegador para ver e imprimir el reporte.',
-        confirmButtonColor: '#006837'
+        confirmButtonColor: '#720917'
       });
     } else {
       alert('Por favor habilita las ventanas emergentes (pop-ups) para ver el reporte.');
@@ -211,7 +211,7 @@ function abrirReporteImpresion(data) {
       justify-content: space-between;
       align-items: flex-end;
       padding-bottom: 6px;
-      border-bottom: 2.5px solid #006837;
+      border-bottom: 2.5px solid #720917;
       margin-bottom: 8px;
     }
     .brand-left {
@@ -222,7 +222,7 @@ function abrirReporteImpresion(data) {
     .logo-square {
       width: 36px;
       height: 36px;
-      background: #006837;
+      background: #720917;
       color: #ffffff;
       display: flex;
       align-items: center;
@@ -235,13 +235,13 @@ function abrirReporteImpresion(data) {
     .brand-title {
       font-size: 16px;
       font-weight: 800;
-      color: #006837;
+      color: #720917;
       letter-spacing: 0.5px;
       line-height: 1.1;
     }
     .brand-subtitle {
       font-size: 9.5px;
-      color: #64748b;
+      color: #857372;
       margin-top: 2px;
     }
     .header-right {
@@ -250,13 +250,13 @@ function abrirReporteImpresion(data) {
     .title-report {
       font-size: 13px;
       font-weight: 800;
-      color: #0f172a;
+      color: #2E2E2E;
       letter-spacing: 0.3px;
     }
     .period-report {
       font-size: 12px;
       font-weight: 700;
-      color: #006837;
+      color: #FF5F00;
       margin-top: 2px;
     }
 
@@ -302,7 +302,7 @@ function abrirReporteImpresion(data) {
       padding: 3.5px 4px;
     }
     th {
-      background: #006837;
+      background: #720917;
       color: #ffffff;
       font-weight: 700;
       text-transform: uppercase;
@@ -573,7 +573,7 @@ async function exportarReportePDF(mes) {
   } catch (err) {
     console.error('Error generando reporte:', err);
     if (typeof Swal !== 'undefined') {
-      Swal.fire({ icon: 'error', title: 'Error', text: 'Error al generar el reporte: ' + err.message, confirmButtonColor: '#006837' });
+      Swal.fire({ icon: 'error', title: 'Error', text: 'Error al generar el reporte: ' + err.message, confirmButtonColor: '#720917' });
     } else {
       alert('Error al generar el reporte: ' + err.message);
     }
@@ -583,7 +583,7 @@ async function exportarReportePDF(mes) {
 async function exportarMatrizExcel(mes) {
   if (typeof XLSX === 'undefined') {
     if (typeof Swal !== 'undefined') {
-      Swal.fire({ icon: 'info', title: 'Cargando', text: 'Librería XLSX cargando. Por favor intente de nuevo en un segundo.', confirmButtonColor: '#006837' });
+      Swal.fire({ icon: 'info', title: 'Cargando', text: 'Librería XLSX cargando. Por favor intente de nuevo en un segundo.', confirmButtonColor: '#720917' });
     } else {
       alert('Librería XLSX cargando. Por favor intente de nuevo en un segundo.');
     }
@@ -650,7 +650,7 @@ async function exportarMatrizExcel(mes) {
   } catch (err) {
     console.error('Error exportando Excel:', err);
     if (typeof Swal !== 'undefined') {
-      Swal.fire({ icon: 'error', title: 'Error', text: 'Error al exportar a Excel: ' + err.message, confirmButtonColor: '#006837' });
+      Swal.fire({ icon: 'error', title: 'Error', text: 'Error al exportar a Excel: ' + err.message, confirmButtonColor: '#720917' });
     } else {
       alert('Error al exportar a Excel: ' + err.message);
     }

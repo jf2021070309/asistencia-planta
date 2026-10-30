@@ -232,13 +232,13 @@
             <p>Control de asistencia del personal</p>
           </div>
           <div class="page-header-actions" style="display: flex; gap: 10px;">
-            <button type="button" class="btn btn-success" style="background-color: #006837; border-color: #006837; color: #ffffff;" onclick="handleExportPDF()">
+            <button type="button" class="btn btn-success" style="background-color: #720917; border-color: #720917; color: #ffffff;" onclick="handleExportPDF()">
               <svg style="width: 17px; height: 17px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4H7v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
               </svg>
               <span>Imprimir Reporte PDF</span>
             </button>
-            <button type="button" class="btn btn-primary" style="background-color: #107c41; border-color: #107c41; color: #ffffff;" onclick="handleExportExcel()">
+            <button type="button" class="btn btn-primary" style="background-color: #FF5F00; border-color: #FF5F00; color: #ffffff;" onclick="handleExportExcel()">
               <svg style="width: 17px; height: 17px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
               </svg>
@@ -603,7 +603,7 @@
             <p>Control y gestión de adelantos y préstamos otorgados al personal</p>
           </div>
           <div class="page-header-actions">
-            <button type="button" class="btn btn-success" onclick="openModalCrearAdelanto()">
+            <button type="button" class="btn btn-success" style="background-color: #720917; border-color: #720917;" onclick="openModalCrearAdelanto()">
               <svg style="width: 16px; height: 16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
               </svg>
@@ -614,22 +614,22 @@
 
         <!-- Tarjetas de Métricas de Adelantos -->
         <div class="kpi-grid" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); margin-bottom: 1.5rem;">
-          <div class="card kpi-card" style="border-left: 4px solid #006837;">
+          <div class="card kpi-card" style="border-left: 4px solid #720917;">
             <div class="kpi-content">
               <span class="kpi-label">TOTAL ADELANTOS DEL MES</span>
-              <span id="adelantos-kpi-total" class="kpi-value" style="color: #006837;">S/ 0.00</span>
+              <span id="adelantos-kpi-total" class="kpi-value" style="color: #720917;">S/ 0.00</span>
             </div>
           </div>
-          <div class="card kpi-card" style="border-left: 4px solid #2563eb;">
+          <div class="card kpi-card" style="border-left: 4px solid #FF5F00;">
             <div class="kpi-content">
               <span class="kpi-label">NÚMERO DE ADELANTOS</span>
-              <span id="adelantos-kpi-cantidad" class="kpi-value">0</span>
+              <span id="adelantos-kpi-cantidad" class="kpi-value" style="color: #FF5F00;">0</span>
             </div>
           </div>
-          <div class="card kpi-card" style="border-left: 4px solid #f59e0b;">
+          <div class="card kpi-card" style="border-left: 4px solid #857372;">
             <div class="kpi-content">
               <span class="kpi-label">PROMEDIO POR ADELANTO</span>
-              <span id="adelantos-kpi-promedio" class="kpi-value">S/ 0.00</span>
+              <span id="adelantos-kpi-promedio" class="kpi-value" style="color: #857372;">S/ 0.00</span>
             </div>
           </div>
         </div>
@@ -687,7 +687,7 @@
             <p>Directorio y gestión del personal de planta y choferes</p>
           </div>
           <div class="page-header-actions">
-            <button type="button" class="btn btn-success" style="background-color: #006837; border-color: #006837;" onclick="openModalCrearPersonal()">
+            <button type="button" class="btn btn-success" style="background-color: #720917; border-color: #720917;" onclick="openModalCrearPersonal()">
               <svg style="width: 16px; height: 16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
               </svg>
@@ -698,22 +698,22 @@
 
         <!-- Tarjetas de Métricas de Personal -->
         <div class="kpi-grid" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); margin-bottom: 1.5rem;">
-          <div class="card kpi-card" style="border-left: 4px solid #006837;">
+          <div class="card kpi-card" style="border-left: 4px solid #720917;">
             <div class="kpi-content">
               <span class="kpi-label">TOTAL COLABORADORES</span>
-              <span id="kpi-personal-total" class="kpi-value" style="color: #006837;">0</span>
+              <span id="kpi-personal-total" class="kpi-value" style="color: #720917;">0</span>
             </div>
           </div>
-          <div class="card kpi-card" style="border-left: 4px solid #16a34a;">
+          <div class="card kpi-card" style="border-left: 4px solid #FF5F00;">
             <div class="kpi-content">
               <span class="kpi-label">PERSONAL ACTIVO</span>
-              <span id="kpi-personal-activos" class="kpi-value" style="color: #16a34a;">0</span>
+              <span id="kpi-personal-activos" class="kpi-value" style="color: #FF5F00;">0</span>
             </div>
           </div>
-          <div class="card kpi-card" style="border-left: 4px solid #0284c7;">
+          <div class="card kpi-card" style="border-left: 4px solid #2E2E2E;">
             <div class="kpi-content">
               <span class="kpi-label">CHOFERES REGISTRADOS</span>
-              <span id="kpi-personal-choferes" class="kpi-value" style="color: #0284c7;">0</span>
+              <span id="kpi-personal-choferes" class="kpi-value" style="color: #2E2E2E;">0</span>
             </div>
           </div>
         </div>
@@ -953,7 +953,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-outline" onclick="closeModalPersonal()">Cancelar</button>
-          <button type="submit" class="btn btn-success" style="background-color: #006837; border-color: #006837;">Guardar Colaborador</button>
+          <button type="submit" class="btn btn-success" style="background-color: #720917; border-color: #720917;">Guardar Colaborador</button>
         </div>
       </form>
     </div>

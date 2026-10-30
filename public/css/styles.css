@@ -8,38 +8,48 @@
 :root {
   --font-main: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   
-  /* Paleta Principal */
-  --bg-sidebar: #141b27;
-  --bg-sidebar-hover: #1c2637;
-  --bg-sidebar-active: #222e43;
+  /* Paleta Corporativa SURGAS Oficial */
+  --surgas-vino: #720917;
+  --surgas-vino-hover: #580611;
+  --surgas-naranja: #FF5F00;
+  --surgas-naranja-hover: #e05300;
+  --surgas-oscuro: #2E2E2E;
+  --surgas-muted: #857372;
+
+  /* Sidebar */
+  --bg-sidebar: #2E2E2E;
+  --bg-sidebar-hover: #3d3d3d;
+  --bg-sidebar-active: #720917;
   --bg-main: #f8fafc;
   --bg-card: #ffffff;
   
   /* Textos */
-  --text-dark: #0f172a;
-  --text-muted: #64748b;
-  --text-light: #94a3b8;
+  --text-dark: #2E2E2E;
+  --text-muted: #857372;
+  --text-light: #9e8e8d;
   --text-white: #ffffff;
   
   /* Colores de Marca y Acciones */
-  --color-primary: #1868df;
-  --color-primary-hover: #1355b8;
-  --color-success: #059669;
-  --color-success-hover: #047857;
+  --color-primary: #720917;
+  --color-primary-hover: #580611;
+  --color-accent: #FF5F00;
+  --color-accent-hover: #e05300;
+  --color-success: #720917;
+  --color-success-hover: #580611;
   --color-emerald: #10b981;
-  --color-warning: #f59e0b;
-  --color-orange: #ea580c;
-  --color-orange-tardanza: #f97316;
-  --color-danger: #ef4444;
-  --color-purple: #8b5cf6;
-  --color-cyan: #06b6d4;
+  --color-warning: #FF5F00;
+  --color-orange: #FF5F00;
+  --color-orange-tardanza: #FF5F00;
+  --color-danger: #e11d48;
+  --color-purple: #857372;
+  --color-cyan: #FF5F00;
   
   /* Bordes y Sombras */
-  --border-color: #e2e8f0;
-  --border-subtle: #f1f5f9;
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
+  --border-color: #e5e0e0;
+  --border-subtle: #f5f2f2;
+  --shadow-sm: 0 1px 2px 0 rgba(46, 46, 46, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(46, 46, 46, 0.08), 0 2px 4px -1px rgba(46, 46, 46, 0.04);
+  --shadow-lg: 0 10px 15px -3px rgba(46, 46, 46, 0.08), 0 4px 6px -2px rgba(46, 46, 46, 0.04);
   --radius-sm: 6px;
   --radius-md: 10px;
   --radius-lg: 14px;
@@ -111,22 +121,22 @@ body {
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  background-color: var(--color-primary);
+  background-color: var(--surgas-naranja);
   color: var(--text-white);
   padding: 0.75rem 1rem;
   border-radius: 9999px;
   font-size: 0.88rem;
-  font-weight: 600;
+  font-weight: 700;
   text-decoration: none;
   border: none;
   cursor: pointer;
-  box-shadow: 0 4px 10px rgba(24, 104, 223, 0.35);
+  box-shadow: 0 4px 12px rgba(255, 95, 0, 0.35);
   margin-bottom: 1.5rem;
   transition: background-color 0.15s, transform 0.1s;
 }
 
 .btn-sidebar-primary:hover {
-  background-color: var(--color-primary-hover);
+  background-color: var(--surgas-naranja-hover);
   transform: translateY(-1px);
 }
 
@@ -135,22 +145,22 @@ body {
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  background-color: var(--color-success);
+  background-color: var(--surgas-vino);
   color: var(--text-white);
   padding: 0.75rem 1rem;
   border-radius: 9999px;
   font-size: 0.88rem;
-  font-weight: 600;
+  font-weight: 700;
   text-decoration: none;
   border: none;
   cursor: pointer;
-  box-shadow: 0 4px 10px rgba(5, 150, 105, 0.3);
+  box-shadow: 0 4px 12px rgba(114, 9, 23, 0.35);
   margin-bottom: 1rem;
   transition: background-color 0.15s, transform 0.1s;
 }
 
 .btn-sidebar-green:hover {
-  background-color: var(--color-success-hover);
+  background-color: var(--surgas-vino-hover);
   transform: translateY(-1px);
 }
 
@@ -192,9 +202,9 @@ body {
 
 .nav-item.active {
   color: #ffffff;
-  background-color: var(--bg-sidebar-active);
+  background-color: var(--surgas-vino);
   font-weight: 600;
-  box-shadow: inset 3px 0 0 var(--color-primary);
+  box-shadow: inset 4px 0 0 var(--surgas-naranja);
 }
 
 .nav-item svg, .nav-item i {
@@ -922,9 +932,9 @@ body {
 }
 
 .matrix-cell-interactive:hover {
-  outline: 2px solid #2563eb;
+  outline: 2px solid var(--surgas-naranja);
   outline-offset: -2px;
-  background-color: #eff6ff !important;
+  background-color: #fff7ed !important;
 }
 
 .matrix-cell-interactive:hover::after {
@@ -933,15 +943,15 @@ body {
   top: 2px;
   right: 2px;
   font-size: 9px;
-  color: #2563eb;
-  background: rgba(255, 255, 255, 0.85);
+  color: var(--surgas-naranja);
+  background: rgba(255, 255, 255, 0.9);
   border-radius: 2px;
   padding: 0 2px;
 }
 
-/* Tabla de Adelantos */
+/* Tabla de Adelantos y Personal */
 .adelantos-table th {
-  background-color: #006837;
+  background-color: var(--surgas-vino);
   color: #ffffff;
   font-size: 0.8rem;
   font-weight: 700;
@@ -950,13 +960,13 @@ body {
 }
 
 .adelantos-table tbody tr:hover {
-  background-color: #f1f5f9;
+  background-color: #f5f2f2;
 }
 
 .adelantos-total-row td {
   background-color: #f8fafc;
   font-weight: 700;
-  border-top: 2px solid #006837;
+  border-top: 2px solid var(--surgas-vino);
 }
 
 .btn-icon {
