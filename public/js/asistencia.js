@@ -62,7 +62,6 @@ async function loadAsistenciasMatrix(mes) {
               onclick="openModalEditarAsistencia(${p.id}, '${f.fechaISO}', '${p.nombreCorto}')">
             <span class="badge-status ${badgeClass}">
               ${estado}
-              ${estado === 'T' && minTardanza ? `<small style="font-size: 8px; margin-left: 2px;">+${minTardanza}m</small>` : ''}
             </span>
           </td>
         `;

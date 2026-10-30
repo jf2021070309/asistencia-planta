@@ -21,7 +21,7 @@ async function fetchPersonalParaAdelantos() {
 
 async function loadAdelantos(mes) {
   const mesInput = document.getElementById('adelanto-mes-picker');
-  let targetMes = mes !== undefined ? mes : (mesInput ? mesInput.value : '2026-09');
+  let targetMes = mes !== undefined ? mes : (mesInput && mesInput.value ? mesInput.value : '2026-10');
 
   const tbody = document.getElementById('adelantos-tbody');
   if (!tbody) return;
@@ -125,7 +125,7 @@ async function openModalCrearAdelanto() {
   document.getElementById('adelanto-obs-input').value = '';
 
   const mesInput = document.getElementById('adelanto-mes-picker');
-  const targetMes = mesInput ? mesInput.value : '2026-09';
+  const targetMes = mesInput && mesInput.value ? mesInput.value : '2026-10';
   document.getElementById('adelanto-fecha-input').value = `${targetMes}-15`;
 
   await poblarSelectColaboradores();

@@ -220,18 +220,18 @@
             <h1>Asistencias</h1>
             <p>Control de asistencia del personal</p>
           </div>
-          <div class="page-header-actions" style="display: flex; gap: 8px;">
-            <button type="button" class="btn btn-success" onclick="handleExportPDF()">
-              <svg style="width: 16px; height: 16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+          <div class="page-header-actions" style="display: flex; gap: 10px;">
+            <button type="button" class="btn btn-success" style="background-color: #006837; border-color: #006837; color: #ffffff;" onclick="handleExportPDF()">
+              <svg style="width: 17px; height: 17px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4H7v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
               </svg>
-              <span>Exportar PDF (Oficial)</span>
+              <span>Imprimir Reporte PDF</span>
             </button>
-            <button type="button" class="btn btn-outline" onclick="handleExportExcel()">
-              <svg style="width: 16px; height: 16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+            <button type="button" class="btn btn-primary" style="background-color: #107c41; border-color: #107c41; color: #ffffff;" onclick="handleExportExcel()">
+              <svg style="width: 17px; height: 17px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
               </svg>
-              <span>Exportar Excel</span>
+              <span>Exportar Excel (.xlsx)</span>
             </button>
           </div>
         </div>
@@ -249,12 +249,6 @@
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                 </svg>
                 <span>Buscar</span>
-              </button>
-              <button type="button" class="btn btn-success" onclick="handleExportExcel()">
-                <svg style="width: 15px; height: 15px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                </svg>
-                <span>Exportar PDF (Excel)</span>
               </button>
             </div>
           </div>
@@ -635,7 +629,7 @@
             <div class="filter-bar">
               <div class="form-group">
                 <label for="adelanto-mes-picker">Filtrar por Mes</label>
-                <input type="month" id="adelanto-mes-picker" class="form-control" value="2026-09" onchange="loadAdelantos(this.value)" />
+                <input type="month" id="adelanto-mes-picker" class="form-control" value="2026-10" onchange="loadAdelantos(this.value)" />
               </div>
               <button type="button" class="btn btn-primary" onclick="loadAdelantos()">
                 <svg style="width: 15px; height: 15px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">

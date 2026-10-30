@@ -1,10 +1,26 @@
 const db = require('../db');
 
 function formatDDMMYYYY(dateStr) {
-  // dateStr: YYYY-MM-DD
-  const parts = dateStr.split('-');
+  if (!dateStr) return '';
+  const parts = String(dateStr).split('T')[0].split('-');
   if (parts.length === 3) {
     return `${parts[2]}/${parts[1]}/${parts[0]}`;
+  }
+  return dateStr;
+}
+
+const mesesNombresEspanol = [
+  'enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio',
+  'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'
+];
+
+function formatFechaEspanol(dateStr) {
+  if (!dateStr) return '';
+  const parts = String(dateStr).split('T')[0].split('-');
+  if (parts.length === 3) {
+    const dia = parseInt(parts[2], 10);
+    const mesIdx = parseInt(parts[1], 10) - 1;
+    return `${dia} de ${mesesNombresEspanol[mesIdx] || ''}`;
   }
   return dateStr;
 }
@@ -408,21 +424,13 @@ exports.getReporteData = async (req, res) => {
       );
       try {
         adelantos = await db.query(
-          `SELECT a.id, a.personal_id, p.nombre_completo, a.monto, DATE_FORMAT(a.fecha, "%d/%m/%Y") as fecha_fmt, a.fecha 
+          `SELECT a.id, a.personal_id, p.nombre_completo, a.monto, DATE_FORMAT(a.fecha, "%Y-%m-%d") as fecha 
            FROM adelantos a 
            JOIN personal p ON p.id = a.personal_id 
            WHERE DATE_FORMAT(a.fecha, "%Y-%m") = ?
-           ORDER BY a.id ASC`,
+           ORDER BY a.fecha ASC, a.id ASC`,
           [mesParam]
         );
-        if (!adelantos || adelantos.length === 0) {
-          adelantos = await db.query(
-            `SELECT a.id, a.personal_id, p.nombre_completo, a.monto, DATE_FORMAT(a.fecha, "%d/%m/%Y") as fecha_fmt, a.fecha 
-             FROM adelantos a 
-             JOIN personal p ON p.id = a.personal_id 
-             ORDER BY a.id ASC`
-          );
-        }
       } catch (e) {
         adelantos = [];
       }
@@ -430,21 +438,16 @@ exports.getReporteData = async (req, res) => {
       const store = db.getMemoryStore();
       personalList = store.personal;
       asistencias = store.asistencias.filter(a => a.fecha.startsWith(mesParam));
-      adelantos = [
-        { id: 1, personal_id: 5, nombre_completo: 'Edwin Lorenzo Machaca Chuquimamani', monto: 500, fecha_fmt: '15 de septiembre' },
-        { id: 2, personal_id: 4, nombre_completo: 'Jerry Jose Lopez Mansilla', monto: 300, fecha_fmt: '15 de septiembre' },
-        { id: 3, personal_id: 1, nombre_completo: 'Kevin Antony Aratea Mamani', monto: 300, fecha_fmt: '15 de septiembre' },
-        { id: 4, personal_id: 6, nombre_completo: 'Brayam Luther Machaca Flores', monto: 400, fecha_fmt: '15 de septiembre' }
-      ];
-    }
-
-    if (!adelantos || adelantos.length === 0) {
-      adelantos = [
-        { id: 1, personal_id: 5, nombre_completo: 'Edwin Lorenzo Machaca Chuquimamani', monto: 500, fecha_fmt: '15 de septiembre' },
-        { id: 2, personal_id: 4, nombre_completo: 'Jerry Jose Lopez Mansilla', monto: 300, fecha_fmt: '15 de septiembre' },
-        { id: 3, personal_id: 1, nombre_completo: 'Kevin Antony Aratea Mamani', monto: 300, fecha_fmt: '15 de septiembre' },
-        { id: 4, personal_id: 6, nombre_completo: 'Brayam Luther Machaca Flores', monto: 400, fecha_fmt: '15 de septiembre' }
-      ];
+      adelantos = (store.adelantos || []).filter(a => a.fecha && a.fecha.startsWith(mesParam)).map(ad => {
+        const p = store.personal.find(item => item.id === ad.personal_id) || {};
+        return {
+          id: ad.id,
+          personal_id: ad.personal_id,
+          nombre_completo: p.nombre_completo || ad.nombre_completo || 'Colaborador',
+          monto: ad.monto,
+          fecha: ad.fecha
+        };
+      });
     }
 
     // Indexar asistencias
@@ -537,14 +540,14 @@ exports.getReporteData = async (req, res) => {
 
     // Adelantos
     let totalMontoAdelantos = 0;
-    const adelantosList = adelantos.map((ad, idx) => {
+    const adelantosList = (adelantos || []).map((ad, idx) => {
       const montoNum = parseFloat(ad.monto) || 0;
       totalMontoAdelantos += montoNum;
       return {
         num: idx + 1,
         colaborador: ad.nombre_completo,
         monto_texto: `S/ ${montoNum.toLocaleString('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
-        fecha_texto: ad.fecha_fmt || '15 de septiembre'
+        fecha_texto: formatFechaEspanol(ad.fecha) || (ad.fecha ? formatDDMMYYYY(ad.fecha) : '')
       };
     });
 

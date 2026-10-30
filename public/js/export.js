@@ -118,7 +118,7 @@ function abrirReporteImpresion(data) {
       </tr>
     `;
   } else {
-    adelantosRows = `<tr><td colspan="4" class="text-center text-muted">Sin registros de adelantos.</td></tr>`;
+    adelantosRows = `<tr><td colspan="4" class="text-center text-muted" style="padding: 10px; font-style: italic;">Sin registros de adelantos en este período (${metadatos.periodo}).</td></tr>`;
   }
 
   const html = `<!DOCTYPE html>
@@ -619,10 +619,14 @@ async function exportarMatrizExcel(mes) {
     aoa.push([]);
     aoa.push(['ADELANTOS DE DINERO']);
     aoa.push(['Nº', 'Colaborador', 'Monto', 'Fecha']);
-    adelantos.items.forEach(ad => {
-      aoa.push([ad.num, ad.colaborador, ad.monto_texto, ad.fecha_texto]);
-    });
-    aoa.push(['', 'Total de adelantos', adelantos.total_texto, '']);
+    if (adelantos && adelantos.items && adelantos.items.length > 0) {
+      adelantos.items.forEach(ad => {
+        aoa.push([ad.num, ad.colaborador, ad.monto_texto, ad.fecha_texto]);
+      });
+      aoa.push(['', 'Total de adelantos', adelantos.total_texto, '']);
+    } else {
+      aoa.push(['-', `Sin registros de adelantos en ${metadatos.periodo}`, 'S/ 0.00', '-']);
+    }
 
     const ws = XLSX.utils.aoa_to_sheet(aoa);
     const wb = XLSX.utils.book_new();
