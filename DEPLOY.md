@@ -3,6 +3,7 @@
 Sistema de **Control de Asistencia del Personal y Despacho de Balones de Gas (SURGAS)**.
 
 * **Subdominio de Producción:** [asistenciaplanta.surgascard.com](http://asistenciaplanta.surgascard.com)
+* **Puerto Interno:** `3005` (independiente de otras aplicaciones como `surgas-chatbot` en el puerto 3000)
 * **Stack:** Node.js + Express + MariaDB / MySQL + Nginx (Reverse Proxy) + PM2 (Daemon)
 
 ---

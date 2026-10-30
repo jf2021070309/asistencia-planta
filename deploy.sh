@@ -34,9 +34,9 @@ echo -e "${GREEN}✔ NPM versión: $(npm -v)${NC}"
 # 2. Configurar archivo .env de producción
 echo -e "\n${YELLOW}[2/6] Verificando variables de entorno (.env)...${NC}"
 if [ ! -f .env ]; then
-    echo -e "${YELLOW}Creando archivo .env para producción...${NC}"
+    echo -e "${YELLOW}Creando archivo .env para producción (Puerto 3005)...${NC}"
     cat <<EOF > .env
-PORT=3000
+PORT=3005
 NODE_ENV=production
 
 # Conexión MariaDB / MySQL
@@ -48,7 +48,9 @@ DB_NAME=asistencia_planta
 EOF
     echo -e "${GREEN}✔ Archivo .env generado. (Modifícalo si tu MariaDB tiene contraseña para root).${NC}"
 else
-    echo -e "${GREEN}✔ Archivo .env ya existe.${NC}"
+    # Si existía con PORT=3000, migrar a 3005 para evitar colisión con otras apps
+    sed -i 's/PORT=3000/PORT=3005/g' .env
+    echo -e "${GREEN}✔ Archivo .env verificado (Puerto 3005).${NC}"
 fi
 
 # 3. Instalar dependencias de Node
@@ -92,6 +94,7 @@ fi
 
 # Iniciar o recargar con ecosystem.config.js
 pm2 startOrReload ecosystem.config.js --update-env
+pm2 restart asistencia-planta --update-env || true
 pm2 save
 # Configurar inicio automático del sistema si aún no está
 pm2 startup systemd -u "$(whoami)" --hp "$HOME" | grep -E "sudo env" | bash 2>/dev/null || true
