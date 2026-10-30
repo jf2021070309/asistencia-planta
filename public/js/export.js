@@ -16,7 +16,16 @@ async function generarReporteHTML(mes) {
 function abrirReporteImpresion(data) {
   const printWindow = window.open('', '_blank');
   if (!printWindow) {
-    alert('Por favor habilita las ventanas emergentes (pop-ups) para ver el reporte.');
+    if (typeof Swal !== 'undefined') {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Ventana bloqueada',
+        text: 'Por favor habilita las ventanas emergentes (pop-ups) en tu navegador para ver e imprimir el reporte.',
+        confirmButtonColor: '#006837'
+      });
+    } else {
+      alert('Por favor habilita las ventanas emergentes (pop-ups) para ver el reporte.');
+    }
     return;
   }
 
@@ -563,13 +572,21 @@ async function exportarReportePDF(mes) {
     abrirReporteImpresion(data);
   } catch (err) {
     console.error('Error generando reporte:', err);
-    alert('Error al generar el reporte: ' + err.message);
+    if (typeof Swal !== 'undefined') {
+      Swal.fire({ icon: 'error', title: 'Error', text: 'Error al generar el reporte: ' + err.message, confirmButtonColor: '#006837' });
+    } else {
+      alert('Error al generar el reporte: ' + err.message);
+    }
   }
 }
 
 async function exportarMatrizExcel(mes) {
   if (typeof XLSX === 'undefined') {
-    alert('Librería XLSX cargando. Por favor intente de nuevo en un segundo.');
+    if (typeof Swal !== 'undefined') {
+      Swal.fire({ icon: 'info', title: 'Cargando', text: 'Librería XLSX cargando. Por favor intente de nuevo en un segundo.', confirmButtonColor: '#006837' });
+    } else {
+      alert('Librería XLSX cargando. Por favor intente de nuevo en un segundo.');
+    }
     return;
   }
 
@@ -632,7 +649,11 @@ async function exportarMatrizExcel(mes) {
     XLSX.writeFile(wb, `SURGAS_Control_Asistencia_${metadatos.periodo.replace(' ', '_')}.xlsx`);
   } catch (err) {
     console.error('Error exportando Excel:', err);
-    alert('Error al exportar a Excel: ' + err.message);
+    if (typeof Swal !== 'undefined') {
+      Swal.fire({ icon: 'error', title: 'Error', text: 'Error al exportar a Excel: ' + err.message, confirmButtonColor: '#006837' });
+    } else {
+      alert('Error al exportar a Excel: ' + err.message);
+    }
   }
 }
 

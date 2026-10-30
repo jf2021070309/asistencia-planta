@@ -202,7 +202,20 @@ async function guardarAdelanto(event) {
 }
 
 async function eliminarAdelanto(id) {
-  if (!confirm('¿Estás seguro de que deseas eliminar este adelanto de dinero?')) {
+  if (typeof Swal !== 'undefined') {
+    const res = await Swal.fire({
+      title: '¿Eliminar adelanto?',
+      text: '¿Estás seguro de que deseas eliminar este adelanto de dinero?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#e11d48',
+      cancelButtonColor: '#64748b',
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar',
+      focusCancel: true
+    });
+    if (!res.isConfirmed) return;
+  } else if (!confirm('¿Estás seguro de que deseas eliminar este adelanto de dinero?')) {
     return;
   }
 

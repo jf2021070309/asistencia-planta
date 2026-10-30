@@ -234,6 +234,20 @@ async function toggleEstadoPersonal(id, nuevoEstado) {
     const item = personalCache.find(p => p.id === id);
     if (!item) return;
 
+    if (nuevoEstado === 'INACTIVO' && typeof Swal !== 'undefined') {
+      const confirmRes = await Swal.fire({
+        title: '¿Inactivar colaborador?',
+        html: `¿Deseas marcar a <b>${item.nombre_completo}</b> como <b>INACTIVO</b>?<br><small style="color: #64748b; margin-top: 6px; display: block;">No aparecerá en la matriz de asistencias activas.</small>`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#e11d48',
+        cancelButtonColor: '#64748b',
+        confirmButtonText: 'Sí, inactivar',
+        cancelButtonText: 'Cancelar'
+      });
+      if (!confirmRes.isConfirmed) return;
+    }
+
     const res = await fetch(`/api/personal/${id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
@@ -263,8 +277,23 @@ async function eliminarPersonalPermanente(id) {
   const item = personalCache.find(p => p.id === id);
   const nombre = item ? item.nombre_completo : 'este colaborador';
 
-  if (!confirm(`¿Estás seguro de eliminar permanentemente a "${nombre}"?\nSi tiene asistencias o adelantos registrados, será marcado como INACTIVO para preservar el historial.`)) {
-    return;
+  if (typeof Swal !== 'undefined') {
+    const result = await Swal.fire({
+      title: '¿Eliminar colaborador?',
+      html: `¿Estás seguro de eliminar permanentemente a <b>"${nombre}"</b>?<br><small style="color: #64748b; display: block; margin-top: 8px;">Si tiene asistencias o adelantos registrados, será marcado como <b>INACTIVO</b> para preservar el historial.</small>`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#e11d48',
+      cancelButtonColor: '#64748b',
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar',
+      focusCancel: true
+    });
+    if (!result.isConfirmed) return;
+  } else {
+    if (!confirm(`¿Estás seguro de eliminar permanentemente a "${nombre}"?\nSi tiene asistencias o adelantos registrados, será marcado como INACTIVO para preservar el historial.`)) {
+      return;
+    }
   }
 
   try {

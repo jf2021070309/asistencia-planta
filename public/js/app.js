@@ -95,6 +95,20 @@ function parseInitialRoute() {
 }
 
 function showToast(message, type = 'info') {
+  if (typeof Swal !== 'undefined') {
+    const swalIcon = type === 'error' ? 'error' : (type === 'success' ? 'success' : (type === 'warning' ? 'warning' : 'info'));
+    Swal.fire({
+      toast: true,
+      position: 'top-end',
+      icon: swalIcon,
+      title: message,
+      showConfirmButton: false,
+      timer: 3000,
+      timerProgressBar: true
+    });
+    return;
+  }
+
   let container = document.getElementById('toast-container');
   if (!container) {
     container = document.createElement('div');

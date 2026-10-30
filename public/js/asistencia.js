@@ -233,7 +233,19 @@ async function eliminarAsistenciaIndividual() {
   const personal_id = document.getElementById('edit-asistencia-personal-id').value;
   const fecha = document.getElementById('edit-asistencia-fecha').value;
 
-  if (!confirm('¿Deseas restablecer este registro a condición de Descanso (-)?')) {
+  if (typeof Swal !== 'undefined') {
+    const res = await Swal.fire({
+      title: '¿Restablecer registro?',
+      text: '¿Deseas restablecer este registro a condición de Descanso (-)?',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#006837',
+      cancelButtonColor: '#64748b',
+      confirmButtonText: 'Sí, restablecer',
+      cancelButtonText: 'Cancelar'
+    });
+    if (!res.isConfirmed) return;
+  } else if (!confirm('¿Deseas restablecer este registro a condición de Descanso (-)?')) {
     return;
   }
 
