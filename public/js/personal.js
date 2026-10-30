@@ -295,3 +295,4 @@ window.guardarPersonal = guardarPersonal;
 window.toggleEstadoPersonal = toggleEstadoPersonal;
 window.eliminarPersonalPermanente = eliminarPersonalPermanente;
 window.filtrarPersonal = filtrarPersonal;
+
