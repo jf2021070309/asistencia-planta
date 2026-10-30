@@ -10,16 +10,17 @@
   
   /* Paleta Corporativa SURGAS Oficial */
   --surgas-vino: #720917;
+  --surgas-vino-dark: #500610;
   --surgas-vino-hover: #580611;
   --surgas-naranja: #FF5F00;
   --surgas-naranja-hover: #e05300;
   --surgas-oscuro: #2E2E2E;
   --surgas-muted: #857372;
 
-  /* Sidebar */
-  --bg-sidebar: #2E2E2E;
-  --bg-sidebar-hover: #3d3d3d;
-  --bg-sidebar-active: #720917;
+  /* Sidebar Guinda Corporativo */
+  --bg-sidebar: #680816;
+  --bg-sidebar-hover: rgba(255, 255, 255, 0.12);
+  --bg-sidebar-active: rgba(0, 0, 0, 0.28);
   --bg-main: #f8fafc;
   --bg-card: #ffffff;
   
@@ -145,22 +146,22 @@ body {
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  background-color: var(--surgas-vino);
+  background-color: var(--surgas-oscuro);
   color: var(--text-white);
   padding: 0.75rem 1rem;
   border-radius: 9999px;
   font-size: 0.88rem;
   font-weight: 700;
   text-decoration: none;
-  border: none;
+  border: 1px solid rgba(255, 255, 255, 0.15);
   cursor: pointer;
-  box-shadow: 0 4px 12px rgba(114, 9, 23, 0.35);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
   margin-bottom: 1rem;
-  transition: background-color 0.15s, transform 0.1s;
+  transition: all 0.15s ease;
 }
 
 .btn-sidebar-green:hover {
-  background-color: var(--surgas-vino-hover);
+  background-color: #1a1a1a;
   transform: translateY(-1px);
 }
 
@@ -168,7 +169,7 @@ body {
 .sidebar-section-title {
   font-size: 0.7rem;
   font-weight: 700;
-  color: #64748b;
+  color: rgba(255, 255, 255, 0.55);
   letter-spacing: 0.75px;
   text-transform: uppercase;
   padding: 1.25rem 0.75rem 0.5rem 0.75rem;
@@ -185,7 +186,7 @@ body {
   align-items: center;
   gap: 0.85rem;
   padding: 0.65rem 0.85rem;
-  color: #94a3b8;
+  color: rgba(255, 255, 255, 0.82);
   text-decoration: none;
   border-radius: var(--radius-sm);
   font-weight: 500;
@@ -202,7 +203,7 @@ body {
 
 .nav-item.active {
   color: #ffffff;
-  background-color: var(--surgas-vino);
+  background-color: var(--bg-sidebar-active);
   font-weight: 600;
   box-shadow: inset 4px 0 0 var(--surgas-naranja);
 }
@@ -210,15 +211,15 @@ body {
 .nav-item svg, .nav-item i {
   width: 18px;
   height: 18px;
-  opacity: 0.85;
+  opacity: 0.9;
 }
 
 .sidebar-footer {
   margin-top: auto;
   padding-top: 1rem;
   font-size: 11px;
-  color: #64748b;
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.6);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -990,4 +991,429 @@ body {
 .btn-icon-danger:hover {
   background: #fee2e2;
   color: #dc2626;
+}
+
+/* ==============================================================================
+   RESPONSIVE DESIGN & SIDEBAR MINIMIZABLE (SURGAS)
+   ============================================================================== */
+
+/* Wrapper del logo y botón de colapso en sidebar */
+.sidebar-brand-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 1.25rem;
+  position: relative;
+}
+
+.sidebar-brand {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.brand-img-container {
+  background: #ffffff;
+  padding: 6px 10px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  transition: all 0.2s ease;
+}
+
+.brand-img-full {
+  max-height: 40px;
+  width: 100%;
+  object-fit: contain;
+}
+
+.brand-img-mini {
+  display: none;
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+  border-radius: 4px;
+}
+
+.btn-sidebar-collapse {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.btn-sidebar-collapse:hover {
+  background: var(--surgas-naranja);
+  border-color: var(--surgas-naranja);
+}
+
+.btn-sidebar-collapse svg {
+  width: 15px;
+  height: 15px;
+  transition: transform 0.25s ease;
+}
+
+.btn-sidebar-close {
+  display: none;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+/* Modo Minimizado / Colapsado en Desktop (Desktop Collapsed) */
+@media (min-width: 769px) {
+  .sidebar {
+    transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1), padding 0.25s ease;
+  }
+
+  .sidebar.collapsed {
+    width: 72px;
+    padding: 1.25rem 0.5rem;
+  }
+
+  .sidebar.collapsed .brand-img-full {
+    display: none;
+  }
+
+  .sidebar.collapsed .brand-img-mini {
+    display: block;
+  }
+
+  .sidebar.collapsed .brand-img-container {
+    padding: 4px;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .sidebar.collapsed .btn-sidebar-collapse svg {
+    transform: rotate(180deg);
+  }
+
+  .sidebar.collapsed .sidebar-brand-wrapper {
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 1.5rem;
+  }
+
+  .sidebar.collapsed .sidebar-section-title {
+    display: none;
+  }
+
+  .sidebar.collapsed .btn-sidebar-primary,
+  .sidebar.collapsed .btn-sidebar-green {
+    padding: 0.75rem 0;
+    width: 44px;
+    height: 44px;
+    margin: 0 auto 1rem auto;
+    border-radius: 12px;
+    justify-content: center;
+  }
+
+  .sidebar.collapsed .btn-sidebar-primary span,
+  .sidebar.collapsed .btn-sidebar-green span {
+    display: none;
+  }
+
+  .sidebar.collapsed .btn-sidebar-primary svg,
+  .sidebar.collapsed .btn-sidebar-green svg {
+    margin: 0;
+  }
+
+  .sidebar.collapsed .nav-item {
+    justify-content: center;
+    padding: 0.75rem 0;
+    position: relative;
+  }
+
+  .sidebar.collapsed .nav-item span {
+    display: none;
+  }
+
+  .sidebar.collapsed .sidebar-footer {
+    justify-content: center;
+  }
+
+  .sidebar.collapsed .sidebar-footer span {
+    display: none;
+  }
+
+  .sidebar.collapsed .db-status-badge {
+    padding: 4px;
+    font-size: 0;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }
+
+  /* Tooltips al pasar cursor en modo colapsado */
+  .sidebar.collapsed .nav-item:hover::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    left: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    background: #2E2E2E;
+    color: #ffffff;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    white-space: nowrap;
+    z-index: 999;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    margin-left: 12px;
+    pointer-events: none;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+}
+
+body.no-scroll {
+  overflow: hidden !important;
+}
+
+/* Backdrop para Móvil */
+.sidebar-backdrop {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(2px);
+  z-index: 998;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.sidebar-backdrop.active {
+  display: block;
+  opacity: 1;
+}
+
+/* ==============================================================================
+   ADAPTACIÓN PARA MÓVILES Y PANTALLAS PEQUEÑAS (<= 768px)
+   ============================================================================== */
+@media (max-width: 768px) {
+  body {
+    flex-direction: column;
+    height: 100vh;
+    overflow-x: hidden;
+  }
+
+  .mobile-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.65rem 1rem;
+    background-color: var(--bg-sidebar);
+    border-bottom: 2px solid var(--surgas-naranja);
+    z-index: 100;
+    flex-shrink: 0;
+  }
+
+  .btn-toggle-menu {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #ffffff;
+    font-size: 1.25rem;
+    cursor: pointer;
+    width: 38px;
+    height: 38px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s ease;
+  }
+
+  .btn-toggle-menu:hover, .btn-toggle-menu:active {
+    background: var(--surgas-naranja);
+  }
+
+  /* Sidebar en Móvil como Drawer */
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 280px;
+    max-width: 85vw;
+    z-index: 1000;
+    transform: translateX(-100%);
+    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.4);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .sidebar.mobile-open {
+    transform: translateX(0) !important;
+  }
+
+  .btn-sidebar-collapse {
+    display: none;
+  }
+
+  .btn-sidebar-close {
+    display: flex;
+  }
+
+  /* Área de contenido y scroll */
+  .content-area {
+    padding: 1rem 0.75rem;
+    overflow-x: hidden;
+  }
+
+  .page-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .page-title-block h1 {
+    font-size: 1.35rem;
+  }
+
+  .page-title-block p {
+    font-size: 0.82rem;
+  }
+
+  .page-header-actions {
+    flex-direction: column;
+    width: 100%;
+    gap: 0.5rem;
+  }
+
+  .page-header-actions .btn {
+    width: 100%;
+    justify-content: center;
+    padding: 0.65rem 1rem;
+  }
+
+  /* Barra de Filtros en Móvil */
+  .filter-bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+
+  .filter-bar .form-group {
+    width: 100%;
+  }
+
+  .filter-bar .form-control {
+    width: 100%;
+    height: 42px;
+  }
+
+  .filter-bar .btn {
+    width: 100%;
+    height: 42px;
+    justify-content: center;
+  }
+
+  /* KPIs en Móvil */
+  .kpi-grid {
+    grid-template-columns: 1fr !important;
+    gap: 0.75rem !important;
+    margin-bottom: 1rem !important;
+  }
+
+  .kpi-card {
+    padding: 0.85rem 1rem !important;
+  }
+
+  /* Matriz de Asistencia en Móvil */
+  .matrix-container {
+    border-radius: var(--radius-sm);
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .matrix-table th, .matrix-table td {
+    padding: 0.5rem 0.4rem;
+    font-size: 0.76rem;
+  }
+
+  .matrix-cell-interactive {
+    min-width: 36px;
+  }
+
+  /* Modales en Móvil */
+  .modal-overlay {
+    padding: 10px;
+    align-items: center;
+  }
+
+  .modal-content {
+    width: 100% !important;
+    max-width: 100% !important;
+    max-height: 90vh !important;
+    overflow-y: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .modal-header {
+    padding: 1rem !important;
+  }
+
+  .modal-body {
+    padding: 1rem !important;
+  }
+
+  .modal-footer {
+    padding: 0.85rem 1rem !important;
+    flex-direction: column-reverse;
+    gap: 0.5rem;
+  }
+
+  .modal-footer .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .modal-body div[style*="grid-template-columns"] {
+    grid-template-columns: 1fr !important;
+    gap: 0.75rem !important;
+  }
+
+  /* Formularios de Esquelas en Móvil */
+  .esquela-layout {
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
+  }
+
+  .card-inputs-grid {
+    grid-template-columns: 1fr !important;
+    gap: 0.75rem !important;
+  }
+
+  .esquela-actions-footer {
+    flex-direction: column-reverse;
+    gap: 0.5rem;
+  }
+
+  .esquela-actions-footer .btn {
+    width: 100%;
+    justify-content: center;
+  }
 }

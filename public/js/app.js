@@ -71,10 +71,42 @@ function navigateTo(viewName, updateUrl = true) {
   }
 
   // Cerrar sidebar móvil si está abierto
+  closeMobileSidebar();
+}
+
+function openMobileSidebar() {
   const sidebar = document.querySelector('.sidebar');
-  if (sidebar && window.innerWidth <= 768) {
-    sidebar.style.transform = 'translateX(-100%)';
+  const backdrop = document.getElementById('sidebar-backdrop');
+  if (sidebar) sidebar.classList.add('mobile-open');
+  if (backdrop) backdrop.classList.add('active');
+  document.body.classList.add('no-scroll');
+}
+
+function closeMobileSidebar() {
+  const sidebar = document.querySelector('.sidebar');
+  const backdrop = document.getElementById('sidebar-backdrop');
+  if (sidebar) {
+    sidebar.classList.remove('mobile-open');
+    sidebar.style.transform = ''; // limpiar cualquier inline style
   }
+  if (backdrop) backdrop.classList.remove('active');
+  document.body.classList.remove('no-scroll');
+}
+
+function toggleMobileSidebar() {
+  const sidebar = document.querySelector('.sidebar');
+  if (sidebar && sidebar.classList.contains('mobile-open')) {
+    closeMobileSidebar();
+  } else {
+    openMobileSidebar();
+  }
+}
+
+function toggleSidebarCollapse() {
+  const sidebar = document.querySelector('.sidebar');
+  if (!sidebar) return;
+  const isCollapsed = sidebar.classList.toggle('collapsed');
+  localStorage.setItem('sidebar_collapsed', isCollapsed ? 'true' : 'false');
 }
 
 function parseInitialRoute() {
@@ -156,7 +188,56 @@ async function checkDatabaseStatus() {
 
 // Inicialización de la aplicación al cargar DOM
 document.addEventListener('DOMContentLoaded', () => {
-  // 1. Manejar botones de navegación
+  const sidebar = document.querySelector('.sidebar');
+  const collapseBtn = document.getElementById('btn-collapse-sidebar');
+  const mobileToggleBtn = document.getElementById('btn-mobile-menu');
+  const mobileCloseBtn = document.getElementById('btn-close-sidebar');
+  const backdrop = document.getElementById('sidebar-backdrop');
+
+  // 1. Restaurar estado de sidebar colapsado en desktop
+  if (sidebar && localStorage.getItem('sidebar_collapsed') === 'true') {
+    if (window.innerWidth > 768) {
+      sidebar.classList.add('collapsed');
+    }
+  }
+
+  // 2. Colapsar / expandir sidebar en Desktop
+  if (collapseBtn) {
+    collapseBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleSidebarCollapse();
+    });
+  }
+
+  // 3. Abrir / cerrar menú móvil tipo Drawer
+  if (mobileToggleBtn) {
+    mobileToggleBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleMobileSidebar();
+    });
+  }
+
+  if (mobileCloseBtn) {
+    mobileCloseBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      closeMobileSidebar();
+    });
+  }
+
+  if (backdrop) {
+    backdrop.addEventListener('click', () => {
+      closeMobileSidebar();
+    });
+  }
+
+  // Si la pantalla se redimensiona a escritorio, limpiar estado móvil
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > 768) {
+      closeMobileSidebar();
+    }
+  });
+
+  // 4. Manejar botones de navegación
   document.querySelectorAll('[data-nav]').forEach(el => {
     el.addEventListener('click', (e) => {
       e.preventDefault();
@@ -165,17 +246,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // 2. Toggle Menú Móvil
-  const toggleBtn = document.getElementById('btn-mobile-menu');
-  const sidebar = document.querySelector('.sidebar');
-  if (toggleBtn && sidebar) {
-    toggleBtn.addEventListener('click', () => {
-      const isClosed = sidebar.style.transform === 'translateX(-100%)' || !sidebar.style.transform;
-      sidebar.style.transform = isClosed ? 'translateX(0)' : 'translateX(-100%)';
-    });
-  }
-
-  // 3. Manejar retroceso en el navegador (popstate)
+  // 5. Manejar retroceso en el navegador (popstate)
   window.addEventListener('popstate', (e) => {
     if (e.state && e.state.view) {
       navigateTo(e.state.view, false);
@@ -184,11 +255,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // 4. Iniciar ruta inicial
+  // 6. Iniciar ruta inicial
   const initial = parseInitialRoute();
   navigateTo(initial, false);
 
-  // 5. Verificar estado de MySQL
+  // 7. Verificar estado de MySQL
   checkDatabaseStatus();
 });
 
