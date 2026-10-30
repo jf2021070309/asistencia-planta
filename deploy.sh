@@ -40,7 +40,7 @@ PORT=3005
 NODE_ENV=production
 
 # Conexión MariaDB / MySQL
-DB_HOST=localhost
+DB_HOST=127.0.0.1
 DB_PORT=3306
 DB_USER=root
 DB_PASSWORD=
@@ -50,7 +50,9 @@ EOF
 else
     # Si existía con PORT=3000, migrar a 3005 para evitar colisión con otras apps
     sed -i 's/PORT=3000/PORT=3005/g' .env
-    echo -e "${GREEN}✔ Archivo .env verificado (Puerto 3005).${NC}"
+    # Forzar IPv4 127.0.0.1 para evitar ECONNREFUSED ::1
+    sed -i 's/DB_HOST=localhost/DB_HOST=127.0.0.1/g' .env
+    echo -e "${GREEN}✔ Archivo .env verificado (Puerto 3005 y DB 127.0.0.1).${NC}"
 fi
 
 # 3. Instalar dependencias de Node
