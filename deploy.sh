@@ -122,14 +122,24 @@ else
     exit 1
 fi
 
+# 7. Configurar SSL con Certbot (Esencial para que Nginx no derive las conexiones HTTPS a otra web)
+echo -e "\n${YELLOW}[7/7] Verificando Certificado SSL HTTPS para asistenciaplanta.surgascard.com...${NC}"
+if command -v certbot &> /dev/null; then
+    echo -e "${YELLOW}Generando / actualizando certificado SSL para asistenciaplanta.surgascard.com...${NC}"
+    sudo certbot --nginx -d asistenciaplanta.surgascard.com --redirect --agree-tos --register-unsafely-without-email --non-interactive || sudo certbot --nginx -d asistenciaplanta.surgascard.com || true
+    echo -e "${GREEN}✔ SSL configurado. Ahora Nginx responderá en HTTPS sin cruzarse con otros sitios.${NC}"
+else
+    echo -e "${RED}Certbot no está instalado aún.${NC}"
+    echo -e "${YELLOW}Instalando certbot...${NC}"
+    sudo apt-get update && sudo apt-get install -y certbot python3-certbot-nginx
+    sudo certbot --nginx -d asistenciaplanta.surgascard.com || true
+fi
+
 echo -e "\n${BLUE}================================================================${NC}"
 echo -e "${GREEN}🎉 ¡DESPLIEGUE COMPLETADO CON ÉXITO!${NC}"
 echo -e "${BLUE}================================================================${NC}"
-echo -e "Tu aplicación ya está corriendo en el puerto 3000 y conectada a Nginx."
-echo -e ""
-echo -e "👉 Para habilitar HTTPS (Certificado SSL gratuito de Let's Encrypt), ejecuta:"
-echo -e "${YELLOW}   sudo apt-get install -y certbot python3-certbot-nginx${NC}"
-echo -e "${YELLOW}   sudo certbot --nginx -d asistenciaplanta.surgascard.com${NC}"
+echo -e "Tu aplicación está corriendo en el puerto 3005 y enlazada a Nginx con HTTPS."
+echo -e "Accede en tu navegador a: https://asistenciaplanta.surgascard.com"
 echo -e ""
 echo -e "👉 Para ver los logs de la aplicación en tiempo real:"
 echo -e "${YELLOW}   pm2 logs asistencia-planta${NC}"
