@@ -53,7 +53,7 @@ function abrirReporteImpresion(data) {
         cellContent = '<span class="badge-letter">F</span>';
       } else if (est === 'T') {
         cellClass = 'cell-t';
-        cellContent = `<div class="badge-t-container"><span class="badge-letter">T</span><span class="badge-sub">+${min}m</span></div>`;
+        cellContent = '<span class="badge-letter">T</span>';
       }
 
       filasHtml += `<td class="text-center ${cellClass}">${cellContent}</td>`;
@@ -594,9 +594,6 @@ async function exportarMatrizExcel(mes) {
       personal.forEach(p => {
         const emp = f.empleados[p.id];
         let val = emp ? emp.estado : '-';
-        if (emp && emp.estado === 'T' && emp.minutos_tardanza) {
-          val = `T (+${emp.minutos_tardanza}m)`;
-        }
         row.push(val);
       });
       aoa.push(row);

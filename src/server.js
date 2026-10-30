@@ -38,9 +38,13 @@ app.get('/api/status', (req, res) => {
 // Dashboard
 app.get('/api/dashboard/kpis', dashboardCtrl.getKpis);
 
-// Personal
+// Personal (CRUD Completo)
 app.get('/api/personal', personalCtrl.getAll);
 app.get('/api/personal/choferes', personalCtrl.getChoferes);
+app.get('/api/personal/:id', personalCtrl.getById);
+app.post('/api/personal', personalCtrl.create);
+app.put('/api/personal/:id', personalCtrl.update);
+app.delete('/api/personal/:id', personalCtrl.delete);
 
 // Asistencias
 app.get('/api/asistencias/matriz', asistenciaCtrl.getMatrix);

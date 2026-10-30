@@ -7,6 +7,7 @@ const VIEWS = {
   'asistencias': 'view-asistencias',
   'tardanzas': 'view-tardanzas',
   'adelantos': 'view-adelantos',
+  'personal': 'view-personal',
   'registro': 'view-registro',
   'nueva-esquela': 'view-nueva-esquela',
   'esquelas': 'view-esquelas'
@@ -44,6 +45,8 @@ function navigateTo(viewName, updateUrl = true) {
     window.loadTardanzas();
   } else if (viewName === 'adelantos' && window.loadAdelantos) {
     window.loadAdelantos();
+  } else if (viewName === 'personal' && window.loadPersonal) {
+    window.loadPersonal();
   } else if (viewName === 'registro' && window.loadRegistroAsistencia) {
     window.loadRegistroAsistencia();
   } else if (viewName === 'nueva-esquela' && window.initNuevaEsquelaForm) {
@@ -57,6 +60,7 @@ function navigateTo(viewName, updateUrl = true) {
     if (viewName === 'asistencias') urlParam = 'asistencia&i=1';
     else if (viewName === 'tardanzas') urlParam = 'asistencia/tardanzas';
     else if (viewName === 'adelantos') urlParam = 'asistencia/adelantos';
+    else if (viewName === 'personal') urlParam = 'personal';
     else if (viewName === 'registro') urlParam = 'asistencia/registrar';
     else if (viewName === 'nueva-esquela') urlParam = 'esquela/crear';
     else if (viewName === 'esquelas') urlParam = 'esquelas';
@@ -80,6 +84,7 @@ function parseInitialRoute() {
   if (urlParam) {
     if (urlParam.includes('tardanzas')) return 'tardanzas';
     if (urlParam.includes('adelanto')) return 'adelantos';
+    if (urlParam.includes('personal')) return 'personal';
     if (urlParam.includes('registrar')) return 'registro';
     if (urlParam.includes('asistencia')) return 'asistencias';
     if (urlParam.includes('esquela/crear')) return 'nueva-esquela';

@@ -5,8 +5,8 @@
 let adelantosCache = [];
 let personalListCache = [];
 
-async function fetchPersonalParaAdelantos() {
-  if (personalListCache.length > 0) return personalListCache;
+async function fetchPersonalParaAdelantos(force = false) {
+  if (!force && personalListCache.length > 0) return personalListCache;
   try {
     const res = await fetch('/api/personal');
     const json = await res.json();
@@ -109,7 +109,7 @@ async function poblarSelectColaboradores(selectedId = null) {
   const select = document.getElementById('adelanto-personal-select');
   if (!select) return;
 
-  const personal = await fetchPersonalParaAdelantos();
+  const personal = await fetchPersonalParaAdelantos(true);
   let options = '<option value="">-- Seleccionar Colaborador --</option>';
   personal.forEach(p => {
     const isSel = selectedId && parseInt(selectedId, 10) === p.id ? 'selected' : '';
