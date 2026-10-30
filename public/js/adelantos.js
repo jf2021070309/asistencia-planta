@@ -124,9 +124,11 @@ async function openModalCrearAdelanto() {
   document.getElementById('adelanto-monto-input').value = '';
   document.getElementById('adelanto-obs-input').value = '';
 
-  const mesInput = document.getElementById('adelanto-mes-picker');
-  const targetMes = mesInput && mesInput.value ? mesInput.value : '2026-10';
-  document.getElementById('adelanto-fecha-input').value = `${targetMes}-15`;
+  const now = new Date();
+  const yyyy = now.getFullYear();
+  const mm = String(now.getMonth() + 1).padStart(2, '0');
+  const dd = String(now.getDate()).padStart(2, '0');
+  document.getElementById('adelanto-fecha-input').value = `${yyyy}-${mm}-${dd}`;
 
   await poblarSelectColaboradores();
 
