@@ -19,9 +19,22 @@ async function fetchPersonalParaAdelantos(force = false) {
   return personalListCache;
 }
 
+function getSafeCurrentMonth() {
+  if (window.getCurrentMonth) return window.getCurrentMonth();
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+}
+
 async function loadAdelantos(mes) {
   const mesInput = document.getElementById('adelanto-mes-picker');
-  let targetMes = mes !== undefined ? mes : (mesInput && mesInput.value ? mesInput.value : '2026-10');
+  const fallbackMes = getSafeCurrentMonth();
+  if (mes === undefined && mesInput && !mesInput.value) {
+    mesInput.value = fallbackMes;
+  }
+  let targetMes = mes !== undefined ? mes : (mesInput && mesInput.value ? mesInput.value : fallbackMes);
+  if (mesInput && mes !== undefined) {
+    mesInput.value = mes;
+  }
 
   const tbody = document.getElementById('adelantos-tbody');
   if (!tbody) return;

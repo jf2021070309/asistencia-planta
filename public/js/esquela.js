@@ -2,6 +2,12 @@
 // SURGAS - MÓDULO DE ESQUELAS DE DESPACHO
 // ==============================================================================
 
+function getSafeCurrentDate() {
+  if (window.getCurrentDate) return window.getCurrentDate();
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+}
+
 async function initNuevaEsquelaForm() {
   const correlativoEl = document.getElementById('esquela-correlativo-text');
   const choferSelect = document.getElementById('esquela-chofer-select');
@@ -9,7 +15,7 @@ async function initNuevaEsquelaForm() {
   const fechaInput = document.getElementById('esquela-fecha-input');
 
   if (fechaInput && !fechaInput.value) {
-    fechaInput.value = new Date().toISOString().slice(0, 10);
+    fechaInput.value = getSafeCurrentDate();
   }
 
   // 1. Obtener siguiente correlativo

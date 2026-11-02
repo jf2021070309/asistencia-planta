@@ -2,9 +2,20 @@
 // SURGAS - MÓDULO DE TARDANZAS
 // ==============================================================================
 
+function getSafeCurrentMonth() {
+  if (window.getCurrentMonth) return window.getCurrentMonth();
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+}
+
 async function loadTardanzas(mes) {
   const mesInput = document.getElementById('tardanza-mes-picker');
-  const targetMes = mes || (mesInput ? mesInput.value : '2026-10');
+  const fallbackMes = getSafeCurrentMonth();
+  if (mesInput && !mesInput.value) {
+    mesInput.value = fallbackMes;
+  }
+  const targetMes = mes || (mesInput && mesInput.value ? mesInput.value : fallbackMes);
+  if (mesInput) mesInput.value = targetMes;
 
   const container = document.getElementById('tardanzas-container');
   if (!container) return;

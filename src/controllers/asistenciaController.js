@@ -25,9 +25,27 @@ function formatFechaEspanol(dateStr) {
   return dateStr;
 }
 
+function getCurrentDatePeru() {
+  try {
+    return new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Lima', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date());
+  } catch (e) {
+    const d = new Date();
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  }
+}
+
+function getCurrentMonthPeru() {
+  try {
+    return new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Lima', year: 'numeric', month: '2-digit' }).format(new Date());
+  } catch (e) {
+    const d = new Date();
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+  }
+}
+
 exports.getMatrix = async (req, res) => {
   try {
-    const mesParam = req.query.mes || '2026-10'; // Formato YYYY-MM
+    const mesParam = req.query.mes || getCurrentMonthPeru(); // Formato YYYY-MM
     const [yearStr, monthStr] = mesParam.split('-');
     const year = parseInt(yearStr, 10);
     const month = parseInt(monthStr, 10);
@@ -105,7 +123,7 @@ exports.getMatrix = async (req, res) => {
 
 exports.getByDate = async (req, res) => {
   try {
-    const fecha = req.query.fecha || new Date().toISOString().slice(0, 10);
+    const fecha = req.query.fecha || getCurrentDatePeru();
     let personalList = [];
     let asistencias = [];
 
@@ -399,7 +417,7 @@ exports.deleteIndividual = async (req, res) => {
 
 exports.getReporteData = async (req, res) => {
   try {
-    const mesParam = req.query.mes || '2026-10'; // YYYY-MM
+    const mesParam = req.query.mes || getCurrentMonthPeru(); // YYYY-MM
     const [yearStr, monthStr] = mesParam.split('-');
     const year = parseInt(yearStr, 10);
     const month = parseInt(monthStr, 10);

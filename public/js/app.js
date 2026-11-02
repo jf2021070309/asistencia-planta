@@ -186,6 +186,41 @@ async function checkDatabaseStatus() {
   }
 }
 
+function getCurrentDate() {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const day = String(now.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
+function getCurrentMonth() {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  return `${year}-${month}`;
+}
+
+function initDefaultDateInputs() {
+  const today = getCurrentDate();
+  const currentMonth = getCurrentMonth();
+
+  const asistenciaMes = document.getElementById('asistencia-mes-picker');
+  if (asistenciaMes && !asistenciaMes.value) asistenciaMes.value = currentMonth;
+
+  const tardanzaMes = document.getElementById('tardanza-mes-picker');
+  if (tardanzaMes && !tardanzaMes.value) tardanzaMes.value = currentMonth;
+
+  const adelantoMes = document.getElementById('adelanto-mes-picker');
+  if (adelantoMes && !adelantoMes.value) adelantoMes.value = currentMonth;
+
+  const registroFecha = document.getElementById('registro-fecha-input');
+  if (registroFecha && !registroFecha.value) registroFecha.value = today;
+
+  const esquelaFecha = document.getElementById('esquela-fecha-input');
+  if (esquelaFecha && !esquelaFecha.value) esquelaFecha.value = today;
+}
+
 // Inicialización de la aplicación al cargar DOM
 document.addEventListener('DOMContentLoaded', () => {
   const sidebar = document.querySelector('.sidebar');
@@ -255,7 +290,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // 6. Iniciar ruta inicial
+  // 6. Iniciar valores de fecha y ruta inicial
+  initDefaultDateInputs();
   const initial = parseInitialRoute();
   navigateTo(initial, false);
 
@@ -263,5 +299,8 @@ document.addEventListener('DOMContentLoaded', () => {
   checkDatabaseStatus();
 });
 
+window.getCurrentDate = getCurrentDate;
+window.getCurrentMonth = getCurrentMonth;
+window.initDefaultDateInputs = initDefaultDateInputs;
 window.navigateTo = navigateTo;
 window.showToast = showToast;

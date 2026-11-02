@@ -3,8 +3,15 @@
 // Adopta el formato exacto del reporte institucional de SURGAS S.A.C.
 // ==============================================================================
 
+function getSafeCurrentMonth() {
+  if (window.getCurrentMonth) return window.getCurrentMonth();
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+}
+
 async function generarReporteHTML(mes) {
-  const targetMes = mes || (document.getElementById('asistencia-mes-picker') ? document.getElementById('asistencia-mes-picker').value : '2026-10');
+  const mesInput = document.getElementById('asistencia-mes-picker');
+  const targetMes = mes || (mesInput && mesInput.value ? mesInput.value : getSafeCurrentMonth());
   const res = await fetch(`/api/asistencias/reporte?mes=${targetMes}`);
   const data = await res.json();
   if (!data.success) {

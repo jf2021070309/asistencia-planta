@@ -8,9 +8,18 @@ function formatDDMMYYYY(dateStr) {
   return dateStr;
 }
 
+function getCurrentDatePeru() {
+  try {
+    return new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Lima', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date());
+  } catch (e) {
+    const d = new Date();
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  }
+}
+
 exports.getKpis = async (req, res) => {
   try {
-    const today = new Date().toISOString().slice(0, 10);
+    const today = getCurrentDatePeru();
     const fechaHoyFormateada = formatDDMMYYYY(today);
 
     if (db.isLiveDB()) {

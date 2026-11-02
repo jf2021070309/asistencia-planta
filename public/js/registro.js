@@ -5,9 +5,19 @@
 let currentRegistroDate = null;
 let currentPersonalRegistros = [];
 
+function getSafeCurrentDate() {
+  if (window.getCurrentDate) return window.getCurrentDate();
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+}
+
 async function loadRegistroAsistencia(fecha) {
   const dateInput = document.getElementById('registro-fecha-input');
-  const targetDate = fecha || (dateInput && dateInput.value ? dateInput.value : new Date().toISOString().slice(0, 10));
+  const fallbackDate = getSafeCurrentDate();
+  if (dateInput && !dateInput.value) {
+    dateInput.value = fallbackDate;
+  }
+  const targetDate = fecha || (dateInput && dateInput.value ? dateInput.value : fallbackDate);
   currentRegistroDate = targetDate;
   if (dateInput) dateInput.value = targetDate;
 

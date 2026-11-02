@@ -8,9 +8,18 @@ function formatDDMMYYYY(dateStr) {
   return dateStr;
 }
 
+function getCurrentMonthPeru() {
+  try {
+    return new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Lima', year: 'numeric', month: '2-digit' }).format(new Date());
+  } catch (e) {
+    const d = new Date();
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+  }
+}
+
 exports.getResumen = async (req, res) => {
   try {
-    const mesParam = req.query.mes || '2026-10'; // YYYY-MM
+    const mesParam = req.query.mes || getCurrentMonthPeru(); // YYYY-MM
     let personalList = [];
     let tardanzas = [];
 

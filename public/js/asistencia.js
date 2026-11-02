@@ -5,9 +5,20 @@
 let currentMatrixData = null;
 let currentEditingPersonal = null;
 
+function getSafeCurrentMonth() {
+  if (window.getCurrentMonth) return window.getCurrentMonth();
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+}
+
 async function loadAsistenciasMatrix(mes) {
   const mesInput = document.getElementById('asistencia-mes-picker');
-  const targetMes = mes || (mesInput ? mesInput.value : '2026-10');
+  const fallbackMes = getSafeCurrentMonth();
+  if (mesInput && !mesInput.value) {
+    mesInput.value = fallbackMes;
+  }
+  const targetMes = mes || (mesInput && mesInput.value ? mesInput.value : fallbackMes);
+  if (mesInput) mesInput.value = targetMes;
 
   const thead = document.getElementById('matrix-thead');
   const tbody = document.getElementById('matrix-tbody');
@@ -280,13 +291,13 @@ async function eliminarAsistenciaIndividual() {
 
 function handleExportExcel() {
   const mesInput = document.getElementById('asistencia-mes-picker');
-  const targetMes = mesInput ? mesInput.value : (currentMatrixData ? currentMatrixData.mes : '2026-10');
+  const targetMes = (mesInput && mesInput.value) ? mesInput.value : (currentMatrixData ? currentMatrixData.mes : getSafeCurrentMonth());
   window.SURGAS_EXPORT.exportarMatrizExcel(targetMes);
 }
 
 function handleExportPDF() {
   const mesInput = document.getElementById('asistencia-mes-picker');
-  const targetMes = mesInput ? mesInput.value : (currentMatrixData ? currentMatrixData.mes : '2026-10');
+  const targetMes = (mesInput && mesInput.value) ? mesInput.value : (currentMatrixData ? currentMatrixData.mes : getSafeCurrentMonth());
   window.SURGAS_EXPORT.exportarReportePDF(targetMes);
 }
 
